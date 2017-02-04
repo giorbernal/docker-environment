@@ -1,0 +1,78 @@
+#
+# TODO Install Docker
+# TODO Install Docker Compose
+# TODO create container directories 
+# sudo mkdir -vp /srv/container/{consul,fluentd,rabbitmq,mongo,elasticsearch,redis,cassandra}
+# docker-compose up -d [service_name]
+# docker-compose stop [service_name]
+#
+version: '2'
+services:
+  consul:
+    image: progrium/consul
+    hostname: consul
+    command: -server
+    ports:
+      - "8300:8300"
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+    volumes:
+      - ./consul/config:/config
+      - /srv/container/consul:/data
+
+  fluentd:
+    image: hbussell/docker-fluentd-kibana
+    hostname: fluentd
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+      - "24224:24224"
+      - "80:80"
+    volumes:
+      - /srv/container/fluentd:/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "25672:25672"
+    volumes:
+      - /srv/container/rabbitmq:/var/lib/rabbitmq
+
+  mongo:
+    image: mongo
+    hostname: mongodb
+    environment:
+      - "TZ=CEST"
+    ports:
+      - "27017:27017"
+    volumes:
+      - /srv/container/mongo:/data/db
+
+  elasticsearch:
+    image: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - /srv/container/elasticsearch:/data
+
+  cassandra:
+    image: cassandra
+    ports:
+      - "7000:7000"
+      - "7199:7199"
+      - "9042:9042"
+      - "9160:9160"
+    volumes:
+      - /srv/container/cassandra:/var/lib/cassandra
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - /srv/container/redis/:/data

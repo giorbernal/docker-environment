@@ -1,0 +1,75 @@
+#
+# TODO Install Docker
+# TODO Install Docker Compose
+# TODO create container directories 
+# sudo mkdir -vp /srv/container/{mongo-rs-1,mongo-rs-2,mongo-rs-3}
+# docker-compose up -d [mongo]
+# docker-compose stop [mongo]
+#
+# TODO Initiate replica set using 
+# rs.initiate(
+# {
+#   _id: "rslocal", 
+#   members:[
+#     { _id : 0, host : "localhost:27017"},
+#     { _id : 1, host : "localhost:27018"},
+#     { _id : 2, host : "localhost:27019"}
+#   ]
+# });
+#
+# Authentication:
+# Connect to primary node
+#
+# Create admin user using
+# db.createUser(
+#  {
+#    user: "admin",
+#    pwd: "admin",
+#    roles: [{ role: "userAdminAnyDatabase", db: "admin" }]
+#  }
+# )
+# Stop replica set using docker-compose stop
+# Uncomment --auth --keyFile /data/db/mongodb-keyfile part
+# Startup replica set using docker-compose up -d [mongo]
+# Connect using admin // admin user
+
+version: '2'
+services:
+  mongo:
+    depends_on: 
+      - mongo_rs_2
+      - mongo_rs_3
+    image: mongo
+    hostname: mongodb
+    command: --replSet rslocal --dbpath /data/db --port 27017 --oplogSize 1024 --smallfiles #--auth --keyFile /data/db/mongodb-keyfile
+    environment:
+      - "TZ=CEST"
+    ports:
+      - "27017:27017"
+    volumes:
+      - /srv/container/mongo-rs-1:/data/db
+      - ./mongodb-keyfile:/data/db/mongodb-keyfile
+
+  mongo_rs_2:
+    image: mongo
+    hostname: mongodb
+    command: --replSet rslocal --dbpath /data/db --port 27018 --oplogSize 1024 --smallfiles #--auth --keyFile /data/db/mongodb-keyfile
+    environment:
+      - "TZ=CEST"
+    ports:
+      - "27018:27018"
+    volumes:
+      - /srv/container/mongo-rs-2:/data/db
+      - ./mongodb-keyfile:/data/db/mongodb-keyfile
+
+  mongo_rs_3:
+    image: mongo
+    hostname: mongodb
+    command: --replSet rslocal --dbpath /data/db --port 27019 --oplogSize 1024 --smallfiles #--auth --keyFile /data/db/mongodb-keyfile
+    environment:
+      - "TZ=CEST"
+    ports:
+      - "27019:27019"
+    volumes:
+      - /srv/container/mongo-rs-3:/data/db
+      - ./mongodb-keyfile:/data/db/mongodb-keyfile
