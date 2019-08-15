@@ -50,15 +50,15 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - /srv/container/mongo:/data/db
+      - /Users/bernal/Documents/ext/docker_pers/mongo:/data/db
 
   elasticsearch:
-    image: elasticsearch
+    image: giorbernal/elasticsearch
     ports:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - /srv/container/elasticsearch:/data
+      - /Users/bernal/Documents/ext/docker_pers/elasticsearch:/data
 
   cassandra:
     image: cassandra
