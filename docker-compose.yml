@@ -58,7 +58,7 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - /Users/bernal/Documents/ext/docker_pers/elasticsearch:/data
+      - /Users/bernal/Documents/ext/docker_pers/elasticsearch:/usr/share/elasticsearch/data
 
   postgresql:
     image: postgres
