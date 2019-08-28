@@ -50,7 +50,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - /Users/bernal/Documents/ext/docker_pers/mongo:/data/db
+      - /srv/container/mongo:/data/db
 
   elasticsearch:
     image: giorbernal/elasticsearch
@@ -58,14 +58,14 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - /Users/bernal/Documents/ext/docker_pers/elasticsearch:/usr/share/elasticsearch/data
+      - /srv/container/elasticsearch:/usr/share/elasticsearch/data
 
   postgresql:
     image: postgres
     ports:
       - "5432:5432"
     volumes:
-      - /Users/bernal/Documents/ext/docker_pers/postgresql:/var/lib/postgresql/data
+      - /srv/container/postgresql:/var/lib/postgresql/data
   #> psql -U postgres -d postgres
   #> CREATE USER <user>
   #> CREATE DATABASE <db>
